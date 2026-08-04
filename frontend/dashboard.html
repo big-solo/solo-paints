@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solo Paints Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<h1>Solo Paints Admin Dashboard</h1>
+<button id="logoutBtn">Logout</button>
+<div class="stats-container">
+
+    <div class="stat-card">
+        <h3>Total Enquiries</h3>
+        <p id="totalContacts">0</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Latest Enquiry</h3>
+        <p id="latestContact">None</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Business</h3>
+        <p>Solo Paints</p>
+    </div>
+
+</div>
+<div class="dashboard-tools">
+
+    <div class="total-box">
+        <h3>Total Enquiries</h3>
+        <span id="totalContacts">0</span>
+    </div>
+
+    <input
+        type="text"
+        id="search"
+        placeholder="Search by name, email or service..."
+    >
+
+</div>
+
+<table>
+  <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Service</th>
+        <th>Message</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+</thead>
+
+    <tbody id="tableBody">
+    </tbody>
+
+</table>
+
+<script src="dashboard.js"></script>
+
+</body>
+</html>
