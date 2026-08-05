@@ -4,6 +4,14 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const Contact = require("./models/contact");
+const nodemailer = require("nodemailer");
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
 //console.log(process.cwd());
 //console.log(process.env);
