@@ -8,7 +8,7 @@ loginForm.addEventListener("submit", async (event) => {
     const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch("http://localhost:5000/admin/login", {
+        const response = await fetch("https://solo-paints.onrender.com/admin/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -22,19 +22,22 @@ loginForm.addEventListener("submit", async (event) => {
         const data = await response.json();
 
         if (response.ok) {
-       if (response.ok) {
 
-    localStorage.setItem("adminLoggedIn", "true");
-    localStorage.setItem("adminToken", data.token);
+            localStorage.setItem("adminLoggedIn", "true");
+            localStorage.setItem("adminToken", data.token);
 
-    window.location.href = "dashboard.html";
-}
+            window.location.href = "dashboard.html";
+
         } else {
-            loginMessage.textContent = data.message || "Invalid login details.";
+
+            loginMessage.textContent =
+                data.message || "Invalid login details.";
+
             loginMessage.style.color = "red";
         }
 
     } catch (error) {
+
         console.error("Login error:", error);
 
         loginMessage.textContent =
