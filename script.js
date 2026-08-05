@@ -1,6 +1,7 @@
 const contactForm = document.getElementById("contactForm");
 
-contactForm.addEventListener("submit", async function (e) {
+if (contactForm) {
+  contactForm.addEventListener("submit", async function (e) {
 
     e.preventDefault();
 
@@ -12,9 +13,9 @@ contactForm.addEventListener("submit", async function (e) {
         message: document.getElementById("message").value
     };
 
-    try {
+ try {
 
-        const response = await fetch("http://localhost:5000/contact", {
+    const response = await fetch("https://solo-paints.onrender.com/contact", {
 
             method: "POST",
 
@@ -46,9 +47,10 @@ contactForm.addEventListener("submit", async function (e) {
 
         alert("Unable to connect to the server.");
 
-    }
-
-});
+    } 
+  
+} );
+}
 // Back To Top Button
 
 const topBtn = document.getElementById("topBtn");
