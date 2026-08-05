@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGODB_URI)
   });
 // GET route
 app.get("/", (req, res) => {
-    res.send("Welcome to Divine Will School Backend!");
+    res.send("Welcome to solo paint Backend!");
 });
 // POST route
 app.post("/contact", async (req, res) => {
