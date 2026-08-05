@@ -117,20 +117,7 @@ app.delete("/contacts/:id", verifyAdminToken, async (req, res) => {
 
 
 // Start the server// Delete a contact
-app.delete("/contacts/:id", async (req, res) => {
-    try {
-        await Contact.findByIdAndDelete(req.params.id);
-        res.json({
-            success: true,
-            message: "Contact deleted successfully!"
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Server Error"
-        });
-    }
-});
+
 // Admin Login
 // Admin login
 app.post("/admin/login", (req, res) => {
