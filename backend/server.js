@@ -41,7 +41,7 @@ app.post("/contact", async (req, res) => {
     message: req.body.message
 });
         await contact.save();
-await transporter.sendMail({
+const info = await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_USER,
     subject: "New Solo Paints Customer Message",
@@ -55,6 +55,7 @@ await transporter.sendMail({
         <p><strong>Message:</strong> ${contact.message}</p>
     `
 });
+        console.log("Email sent:", info.response);
         res.status(201).json({
             success: true,
             message: "Message saved successfully!"
