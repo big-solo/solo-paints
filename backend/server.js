@@ -41,7 +41,20 @@ app.post("/contact", async (req, res) => {
     message: req.body.message
 });
         await contact.save();
+await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: process.env.EMAIL_USER,
+    subject: "New Solo Paints Customer Message",
+    html: `
+        <h2>New Customer Message</h2>
 
+        <p><strong>Name:</strong> ${contact.name}</p>
+        <p><strong>Email:</strong> ${contact.email}</p>
+        <p><strong>Phone:</strong> ${contact.phone}</p>
+        <p><strong>Service:</strong> ${contact.service}</p>
+        <p><strong>Message:</strong> ${contact.message}</p>
+    `
+});
         res.status(201).json({
             success: true,
             message: "Message saved successfully!"
