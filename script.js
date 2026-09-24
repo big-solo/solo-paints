@@ -5,25 +5,27 @@ if (contactForm) {
 
     e.preventDefault();
 
-    const data = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        service: document.getElementById("service").value,
-        message: document.getElementById("message").value
-    };
+    const formData = new FormData();
 
- try {
+    formData.append("name", document.getElementById("name").value);
+    formData.append("email", document.getElementById("email").value);
+    formData.append("phone", document.getElementById("phone").value);
+    formData.append("service", document.getElementById("service").value);
+    formData.append("message", document.getElementById("message").value);
 
-    const response = await fetch("https://solo-paints.onrender.com/contact", {
+    const imageInput = document.getElementById("sampleImage");
+
+    if (imageInput.files.length > 0) {
+        formData.append("sampleImage", imageInput.files[0]);
+    }
+
+    try {
+
+        const response = await fetch("https://solo-paints.onrender.com/contact", {
 
             method: "POST",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify(data)
+            body: formData
 
         });
 
@@ -47,9 +49,9 @@ if (contactForm) {
 
         alert("Unable to connect to the server.");
 
-    } 
-  
-} );
+    }
+
+  });
 }
 // Back To Top Button
 

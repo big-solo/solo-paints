@@ -5,14 +5,30 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const Contact = require("./models/contact");
 const nodemailer = require("nodemailer");
+const multer = require("multer");
+const { v2: cloudinary } = require("cloudinary");
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    family: 4,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     }
 });
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 10 * 1024 * 1024
+    }
+});
 //console.log(process.cwd());
 //console.log(process.env);
 const app = express();
@@ -31,29 +47,63 @@ app.get("/", (req, res) => {
     res.send("Welcome to solo paint Backend!");
 });
 // POST route
-app.post("/contact", async (req, res) => {
+app.post("/contact", upload.single("sampleImage"), async (req, res) => {
     try {
-    const contact = new Contact({
+let imageUrl = "";
+
+if (req.file) {
+    const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: "solo-paints"
+            },
+            (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            }
+        );
+
+        stream.end(req.file.buffer);
+    });
+
+    imageUrl = result.secure_url;
+}
+
+const contact = new Contact({
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
     service: req.body.service,
-    message: req.body.message
+    message: req.body.message,
+    imageUrl: imageUrl
 });
         await contact.save();
 const info = await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_USER,
     subject: "New Solo Paints Customer Message",
-    html: `
-        <h2>New Customer Message</h2>
+  html: `
+    <h2>New Customer Message</h2>
 
-        <p><strong>Name:</strong> ${contact.name}</p>
-        <p><strong>Email:</strong> ${contact.email}</p>
-        <p><strong>Phone:</strong> ${contact.phone}</p>
-        <p><strong>Service:</strong> ${contact.service}</p>
-        <p><strong>Message:</strong> ${contact.message}</p>
-    `
+    <p><strong>Name:</strong> ${contact.name}</p>
+    <p><strong>Email:</strong> ${contact.email}</p>
+    <p><strong>Phone:</strong> ${contact.phone}</p>
+    <p><strong>Service:</strong> ${contact.service}</p>
+    <p><strong>Message:</strong> ${contact.message}</p>
+
+    ${contact.imageUrl ? `
+        <p>
+            <strong>Sample Image:</strong>
+            <a href="${contact.imageUrl}" target="_blank">
+                View Customer's Sample Image
+            </a>
+        </p>
+    ` : ""}
+`
+
 });
         console.log("Email sent:", info.response);
         res.status(201).json({
